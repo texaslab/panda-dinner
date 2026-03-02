@@ -195,13 +195,13 @@ function SpinWheel({ onSpinComplete, disabled }) {
     // Pick random target country
     const targetIdx = Math.floor(Math.random() * numSegments);
 
-    // Total rotation: 5-7 full spins + position to land on target
-    const totalSpins = 5 + Math.random() * 2;
-    // The pointer is at top (angle = -PI/2). We want targetIdx segment center at top.
-    // Segment i center is at: i * segAngle + segAngle/2
-    // We want that to equal -PI/2 (top), so we need to rotate wheel by: -PI/2 - (i * segAngle + segAngle/2)
+    // Integer full spins (5, 6, or 7) — must be whole numbers or the landing segment will be wrong
+    const totalFullSpins = 5 + Math.floor(Math.random() * 3);
+    // Exact angle where targetIdx center sits under the pointer (top = -PI/2)
     const targetAngle = -Math.PI / 2 - (targetIdx * segAngle + segAngle / 2);
-    const finalAngle = angleRef.current - (totalSpins * 2 * Math.PI) + (targetAngle - angleRef.current % (2 * Math.PI));
+    // Counterclockwise delta from current position to target (always positive, in [0, 2π))
+    const delta = ((angleRef.current - targetAngle) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+    const finalAngle = angleRef.current - totalFullSpins * 2 * Math.PI - delta;
 
     const duration = 5500 + Math.random() * 1500; // 5.5-7s
     const startAngle = angleRef.current;
