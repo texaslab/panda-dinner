@@ -7,6 +7,8 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'GOOGLE_API_KEY not configured' });
   }
 
+  console.log('Key length:', process.env.GOOGLE_API_KEY.length, '| First 8 chars:', process.env.GOOGLE_API_KEY.substring(0, 8));
+
   try {
     const { system, messages, max_tokens } = req.body;
 
